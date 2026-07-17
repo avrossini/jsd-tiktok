@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Authorization — JSD Publisher</title>
+<style>
+  :root{--bg:#0f1115;--card:#171a21;--fg:#e8eaed;--muted:#9aa0aa;--accent:#ff2b55;--ok:#2ecc71;--line:#262b34}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+  .wrap{max-width:640px;margin:0 auto;padding:64px 24px}
+  h1{font-size:1.5rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin-top:24px}
+  code{display:block;background:#0b0d11;border:1px solid var(--line);border-radius:8px;padding:14px;word-break:break-all;color:var(--ok);font-family:ui-monospace,Consolas,monospace;font-size:.85rem}
+  button{margin-top:14px;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer}
+  .muted{color:var(--muted)}
+  .err{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>JSD Publisher — Authorization</h1>
+  <div id="content" class="card"><p class="muted">Reading response…</p></div>
+</div>
+<script>
+  var p = new URLSearchParams(window.location.search);
+  var code = p.get("code");
+  var err = p.get("error");
+  var errDesc = p.get("error_description");
+  var state = p.get("state");
+  var el = document.getElementById("content");
+  if (err) {
+    el.innerHTML = '<p class="err"><strong>Authorization failed:</strong> ' +
+      (err) + (errDesc ? ' — ' + errDesc : '') + '</p>';
+  } else if (code) {
+    el.innerHTML = '<p><strong>Authorization received.</strong> You can close this window.</p>' +
+      '<p class="muted">Authorization code:</p><code id="code">' + code + '</code>' +
+      (state ? '<p class="muted" style="margin-top:12px">state: ' + state + '</p>' : '') +
+      '<button onclick="navigator.clipboard.writeText(document.getElementById(\'code\').innerText)">Copy code</button>';
+  } else {
+    el.innerHTML = '<p class="muted">This page receives the authorization response from TikTok. ' +
+      'Open it via the sign-in flow.</p>';
+  }
+</script>
+</body>
+</html>
